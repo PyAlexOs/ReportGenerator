@@ -1,0 +1,36 @@
+{
+  "styles": {
+    "Normal": {
+      "font": {
+        "name": "Times New Roman",
+        "size": 14,
+        "all_caps": false,
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "color": [
+          0,
+          0,
+          0
+        ],
+        "math": false,
+        "no_proof": false
+      },
+      "paragraph_format": {
+        "alignment": 3,
+        "first_line_indent": 1.25,
+        "keep_together": false,
+        "keep_with_next": false,
+        "left_indent": 0,
+        "line_spacing_rule": 1,
+        "page_break_before": true,
+        "right_indent": 0,
+        "space_after": 0,
+        "space_before": 0,
+        "tab_stops": 0,
+        "widow_control": 0,
+        "next_paragraph_style": "Normal"
+      }
+    }
+  }
+}
