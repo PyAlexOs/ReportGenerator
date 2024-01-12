@@ -11,7 +11,7 @@ from docx.enum.style import (WD_BUILTIN_STYLE,
 from docx.enum.dml import (MSO_COLOR_TYPE,
                            MSO_THEME_COLOR_INDEX)
 from docx.shared import Pt, Cm, Mm, RGBColor
-from socket import gethostname
+from enum import Enum
 from os import path
 from sys import argv
 import json
@@ -20,6 +20,7 @@ import re
 
 class Report:
     """ Provides methods for working with the generated report in accordance with the state standard """
+
     def __init__(self, filename: str, styles_path="styles.json"):
         self.styles_path = path.abspath(styles_path)
         self.filename = filename
@@ -35,6 +36,7 @@ class Report:
     def __call__(self):
         self.set_styles()
         self.parse_content()
+        self.document.save(self.filename)
 
     def check_filename(self):
         """ Checks if the file path and file name are correct """
@@ -64,30 +66,61 @@ class Report:
         for style in styles:
             styles[style.name].delete()
 
-        for (name, values) in styles_from_file["styles"].items():
-            current_style = styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH)
-            current_style.font.name = values["font"]["name"]
-            current_style.font.size = Pt(values["font"]["size"])
+        for (i, (name, values)) in enumerate(styles_from_file["styles"].items()):
+            try:
+                current_style = styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH)
+                font = current_style.font
+                font.name = values["font"]["name"]
+                font.size = Pt(values["font"]["size"])
 
-            current_style.font.all_caps = values["font"]["all_caps"]
-            current_style.font.bold = values["font"]["bold"]
-            current_style.font.italic = values["font"]["italic"]
-            current_style.font.underline = values["font"]["underline"]
+                font.all_caps = values["font"]["all_caps"]
+                font.bold = values["font"]["bold"]
+                font.italic = values["font"]["italic"]
+                font.underline = values["font"]["underline"]
 
-            current_style.font.color.ColorFormat = MSO_COLOR_TYPE.RGB
-            current_style.font.color.rgb = RGBColor(*values["font"]["color"])
+                font.color.ColorFormat = MSO_COLOR_TYPE.RGB
+                font.color.rgb = RGBColor(*values["font"]["color"])
 
-            current_style.font.math = values["font"]["math"]
-            current_style.font.no_proof = values["font"]["no_proof"]
+                font.math = values["font"]["math"]
+                font.no_proof = values["font"]["no_proof"]
+
+                paragraph = current_style.paragraph_format
+                paragraph.alignment = WD_PARAGRAPH_ALIGNMENT(values["paragraph_format"]["alignment"])
+                paragraph.first_line_indent = Cm(values["paragraph_format"]["first_line_indent"])
+                paragraph.line_spacing_rule = WD_LINE_SPACING(values["paragraph_format"]["line_spacing_rule"])
+
+                paragraph.left_indent = Cm(values["paragraph_format"]["left_indent"])
+                paragraph.right_indent = Cm(values["paragraph_format"]["right_indent"])
+                paragraph.space_before = Mm(values["paragraph_format"]["space_before"])
+                paragraph.space_after = Mm(values["paragraph_format"]["space_after"])
+
+                paragraph.keep_together = values["paragraph_format"]["keep_together"]
+                paragraph.keep_with_next = values["paragraph_format"]["keep_with_next"]
+                paragraph.page_break_before = values["paragraph_format"]["page_break_before"]
+                paragraph.widow_control = values["paragraph_format"]["widow_control"]
+                paragraph.next_paragraph_style = values["paragraph_format"]["next_paragraph_style"]
+
+            except (TypeError, KeyError) as error:
+                exit(f"Incorrect style attribute: {error}")
 
     def parse_content(self):
         """ Parses files in the directory and composes the document from them """
-        self.document.add_heading("Heading 1", 1)
+        self.document.add_paragraph("Heading1 but normal", "Normal")
         """self.document.add_paragraph("Heading 2", style="Heading 2")
         self.document.add_paragraph("Heading 3", style="Heading 3")
         self.document.add_paragraph("NORMal Text herrrre", style="Normal")"""
-        self.document.core_properties.revision += 1
-        self.document.save(self.filename)
+
+
+class ParagraphType(Enum):
+    HEADING_1 = 1
+    HEADING_2 = 2
+    HEADING_3 = 3
+    BODY = 4
+
+    PICTURE = 10
+    TABLE = 11
+    FORMULA = 12
+    LISTING = 13
 
 
 # python main.py documents/testReport.docx
@@ -99,6 +132,13 @@ def main():
 
     report = Report(path.abspath(filename))
     report()
+
+    token_list: list[list[str, ParagraphType]] = list()
+    with open("documents/test.md", "r", encoding="utf-8") as file:
+        lines = file.readlines()
+        for (i, line) in enumerate(lines):
+            if line.startswith("###"):
+                token_list.append(line)
 
 
 if __name__ == '__main__':

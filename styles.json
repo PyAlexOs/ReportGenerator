@@ -19,16 +19,108 @@
       "paragraph_format": {
         "alignment": 3,
         "first_line_indent": 1.25,
+        "line_spacing_rule": 1,
+        "left_indent": 0,
+        "right_indent": 0,
+        "space_before": 0,
+        "space_after": 0,
         "keep_together": false,
         "keep_with_next": false,
-        "left_indent": 0,
+        "page_break_before": false,
+        "widow_control": true,
+        "next_paragraph_style": "Normal"
+      }
+    },
+    "Heading 1": {
+      "font": {
+        "name": "Times New Roman",
+        "size": 18,
+        "all_caps": true,
+        "bold": true,
+        "italic": false,
+        "underline": false,
+        "color": [
+          0,
+          0,
+          0
+        ],
+        "math": false,
+        "no_proof": false
+      },
+      "paragraph_format": {
+        "alignment": 0,
+        "first_line_indent": 0,
         "line_spacing_rule": 1,
-        "page_break_before": true,
+        "left_indent": 1.25,
         "right_indent": 0,
-        "space_after": 0,
         "space_before": 0,
-        "tab_stops": 0,
-        "widow_control": 0,
+        "space_after": 10,
+        "keep_together": false,
+        "keep_with_next": true,
+        "page_break_before": true,
+        "widow_control": false,
+        "next_paragraph_style": "Normal"
+      }
+    },
+    "Heading 2": {
+      "font": {
+        "name": "Times New Roman",
+        "size": 16,
+        "all_caps": false,
+        "bold": true,
+        "italic": false,
+        "underline": false,
+        "color": [
+          0,
+          0,
+          0
+        ],
+        "math": false,
+        "no_proof": false
+      },
+      "paragraph_format": {
+        "alignment": 0,
+        "first_line_indent": 0,
+        "line_spacing_rule": 1,
+        "left_indent": 1.25,
+        "right_indent": 0,
+        "space_before": 15,
+        "space_after": 10,
+        "keep_together": false,
+        "keep_with_next": true,
+        "page_break_before": false,
+        "widow_control": true,
+        "next_paragraph_style": "Normal"
+      }
+    },
+    "Heading 3": {
+      "font": {
+        "name": "Times New Roman",
+        "size": 14,
+        "all_caps": false,
+        "bold": true,
+        "italic": false,
+        "underline": false,
+        "color": [
+          0,
+          0,
+          0
+        ],
+        "math": false,
+        "no_proof": false
+      },
+      "paragraph_format": {
+        "alignment": 0,
+        "first_line_indent": 0,
+        "line_spacing_rule": 1,
+        "left_indent": 1.25,
+        "right_indent": 0,
+        "space_before": 15,
+        "space_after": 10,
+        "keep_together": false,
+        "keep_with_next": true,
+        "page_break_before": false,
+        "widow_control": true,
         "next_paragraph_style": "Normal"
       }
     }
