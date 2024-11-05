@@ -18,10 +18,13 @@ import json
 import re
 
 
+STYLES_PATH = "styles/styles.json"
+
+
 class Report:
     """ Provides methods for working with the generated report in accordance with the state standard """
 
-    def __init__(self, filename: str, styles_path="styles.json"):
+    def __init__(self, filename: str, styles_path: str = STYLES_PATH):
         self.styles_path = path.abspath(styles_path)
         self.filename = filename
         self.check_filename()
@@ -41,7 +44,7 @@ class Report:
     def check_filename(self):
         """ Checks if the file path and file name are correct """
         if re.match(r"^(/+|\\+)$", self.filename) is not None:
-            exit("Wrong file path")
+            exit("Wrong file name or path")
 
         dlm: str = '/' if self.filename.find("/") != -1 else "\\"
         if not path.exists(dlm.join(self.filename.split(dlm)[:-1:])):
@@ -64,6 +67,7 @@ class Report:
 
         styles = self.document.styles
         for style in styles:
+            print(style.name)
             styles[style.name].delete()
 
         for (i, (name, values)) in enumerate(styles_from_file["styles"].items()):
@@ -112,15 +116,26 @@ class Report:
 
 
 class ParagraphType(Enum):
+    CONTENT = -1
+    HEADING = 0
     HEADING_1 = 1
     HEADING_2 = 2
     HEADING_3 = 3
-    BODY = 4
 
-    PICTURE = 10
-    TABLE = 11
+    REGULAR = 4
+    BULLET_LIST = 5
+    NUMBERED_LIST = 6
+
+    PICTURE = 7
+    PICTURE_HEADING = 8
+    TABLE = 9
+    TABLE_HEADING = 10
     FORMULA = 12
-    LISTING = 13
+    FORMULA_COMMENT = 13
+    CODE = 14
+    CODE_HEADING = 15
+    APPENDIX = 16
+    BIBLIOGRAPHY = 17
 
 
 # python main.py documents/testReport.docx
@@ -133,12 +148,12 @@ def main():
     report = Report(path.abspath(filename))
     report()
 
-    token_list: list[list[str, ParagraphType]] = list()
+    """token_list: list[list[str, ParagraphType]] = list()
     with open("documents/test.md", "r", encoding="utf-8") as file:
         lines = file.readlines()
         for (i, line) in enumerate(lines):
             if line.startswith("###"):
-                token_list.append(line)
+                token_list.append(line)"""
 
 
 if __name__ == '__main__':
